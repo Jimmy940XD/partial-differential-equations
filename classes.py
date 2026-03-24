@@ -8,5 +8,5 @@ class Lattice:
         noise = np.random.uniform(-.01, .01, size=(side_len, side_len))
         self.lattice = base + noise
 
-    def update(self):
+    def evolve(self):
         cahn_hilliard_cfd(self.lattice)
