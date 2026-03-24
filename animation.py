@@ -16,7 +16,7 @@ state = Lattice(SIDE_LEN, PHI0)
 
 fig, ax = plt.subplots()
 cmap = ListedColormap(["yellow", "blue"])
-img = ax.imshow(state.lattice, cmap=cmap, interpolation="none")
+img = ax.imshow(state.lattice, cmap=cmap, interpolation="none", vmin=(PHI0 - .01), vmax=(PHI0 + .01))
 
 animation = FuncAnimation(fig, update, frames=None, interval=50, blit=True, cache_frame_data=False)
 plt.show()

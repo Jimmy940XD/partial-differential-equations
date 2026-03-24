@@ -3,10 +3,9 @@ from numba import njit
 
 
 @njit
-def cahn_hilliard_cfd(lattice: np.ndarray):
+def cahn_hilliard_cfd(info: tuple):
+    lattice, DX_, dt_ = info
     SIDE_LEN = lattice.shape[0]
-    DX_ = 1
-    dt_ = float(input("Enter the time discretisation: "))
     phi = lattice.copy()
     mu = np.zeros_like(lattice)
     for i in range(SIDE_LEN):
