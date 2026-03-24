@@ -1,0 +1,23 @@
+import numpy as np
+from numba import njit
+
+
+@njit
+def cahn_hilliard_cfd(lattice: np.ndarray):
+    SIDE_LEN = lattice.shape[0]
+    DX_ = 1
+    dt_ = float(input("Enter the time discretisation: "))
+    phi = lattice.copy()
+    mu = np.zeros_like(lattice)
+    for i in range(SIDE_LEN):
+        for j in range(SIDE_LEN):
+            mu[i][j] = phi[i][j] * (1 + phi[i][j]**2) - \
+                        1 / DX_**2 * (phi[(i + 1) % SIDE_LEN][j] + \
+                        phi[(i - 1) % SIDE_LEN][j] + phi[i][(j + 1) % SIDE_LEN] + \
+                        phi[i][(j - 1) % SIDE_LEN] - 4 * phi[i][j])
+    for i in range(SIDE_LEN):
+        for j in range(SIDE_LEN):
+            phi[i][j] = phi[i][j] + dt_ / DX_**2 * (mu[(i + 1) % SIDE_LEN][j] + \
+                        mu[(i - 1) % SIDE_LEN][j] + mu[i][(j + 1) % SIDE_LEN] + \
+                        mu[i][(j - 1) % SIDE_LEN] - 4 * mu[i][j])
+    lattice = phi
