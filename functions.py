@@ -38,6 +38,6 @@ def free_energy(info: tuple):
         for j in range(SIDE_LEN):
             f[i, j] = -1 / 2 * phi[i, j]**2 + 1 / 4 * phi[i, j]**4 + \
                         1 / 2 * (((phi[(i + 1) % SIDE_LEN, j] - \
-                        phi[(i - 1) % SIDE_LEN, j]) / (2 * DX_))**2 + \
-                        ((phi[i, (j + 1) % SIDE_LEN] - phi[i, (j - 1) % SIDE_LEN]) / (2 * DX_))**2)
+                        phi[(i - 1) % SIDE_LEN, j])**2 + (phi[i, (j + 1) % SIDE_LEN] - \
+                        phi[i, (j - 1) % SIDE_LEN])**2) / (2 * DX_)**2)
     return f
