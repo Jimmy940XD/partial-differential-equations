@@ -7,6 +7,9 @@ def jacobi(lattice: np.ndarray):
     SIDE_LEN = lattice.shape[0]
     phi0 = lattice.copy()
     rho = np.zeros_like(lattice)
+    mid = SIDE_LEN // 2
+    centre = (mid, mid, mid)
+    rho[centre] = 1 # initialize as one likes
     phi = np.zeros_like(lattice)
     for i in range(SIDE_LEN):
         for j in range(SIDE_LEN):
