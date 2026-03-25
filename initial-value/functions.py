@@ -29,7 +29,7 @@ def cahn_hilliard_cfd(info: tuple):
 @njit
 def free_energy(info: tuple):
     """
-    Calculates the dimesnionless free energy density.
+    Calculates the dimensionless free energy density.
     """
     phi, DX_ = info
     SIDE_LEN = phi.shape[0]
