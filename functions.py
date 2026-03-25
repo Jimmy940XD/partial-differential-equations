@@ -4,6 +4,10 @@ from numba import njit
 
 @njit
 def cahn_hilliard_cfd(info: tuple):
+    """
+    Updating function following the Cahn-Hilliard equation, using
+    a centred spatial difference and a forward time difference.
+    """
     lattice, DX_, dt_ = info
     SIDE_LEN = lattice.shape[0]
     phi = lattice.copy()
@@ -24,6 +28,9 @@ def cahn_hilliard_cfd(info: tuple):
 
 @njit
 def free_energy(info: tuple):
+    """
+    Calculates the dimesnionless free energy density.
+    """
     phi, DX_ = info
     SIDE_LEN = phi.shape[0]
     f = np.zeros_like(phi)
