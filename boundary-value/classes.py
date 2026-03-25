@@ -8,4 +8,10 @@ class Lattice:
         self.lattice = np.zeros(shape=(side_len, side_len, side_len))
 
     def evolve(self):
-        jacobi(self.lattice)
+        """
+        Handler method. If assigned to a variable, it updates the
+        lattice to the next iteration and returns difference between
+        the previous and the current lattice. If not assigned to a
+        variable, it only updates the lattice.
+        """
+        return jacobi(self.lattice)
