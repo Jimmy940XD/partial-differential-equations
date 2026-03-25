@@ -40,4 +40,4 @@ def free_energy(info: tuple):
                         1 / 2 * (((phi[(i + 1) % SIDE_LEN, j] - \
                         phi[(i - 1) % SIDE_LEN, j])**2 + (phi[i, (j + 1) % SIDE_LEN] - \
                         phi[i, (j - 1) % SIDE_LEN])**2) / (2 * DX_)**2)
-    return f
+    return np.sum(f)
