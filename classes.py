@@ -1,5 +1,5 @@
 import numpy as np
-from functions import cahn_hilliard_cfd
+from functions import cahn_hilliard_cfd, free_energy
 
 class Lattice:
     def __init__(self, side_len: int, phi0: float):
@@ -12,6 +12,13 @@ class Lattice:
         noise = np.random.uniform(-.01, .01, size=(side_len, side_len))
         self.lattice = base + noise
 
+
     def evolve(self):
         info = (self.lattice, self.dx_, self.dt_)
         cahn_hilliard_cfd(info)
+
+    
+    @property
+    def free_energy(self):
+        info = self.lattice, self.dx_
+        return free_energy(info)
