@@ -2,6 +2,22 @@ import numpy as np
 from functions import cahn_hilliard_cfd, free_energy
 
 class Lattice:
+    """
+    A representation of a mixed-fluid lattice.
+
+    Properties
+    ----------
+    self.dx_: int
+        The discretized spatial step. It is hard-coded to 1 for
+        simplicity (a cell is the discretisation).
+    self.dt_: float
+        The discretized timestep.
+    self.lattice: numpy.ndarray
+        The lattice.
+    self.free_energy: numpy.ndarray
+        Property method. Returns an array with the value of the free energy
+        at each point in space.
+    """
     def __init__(self, side_len: int, phi0: float):
         # discretization
         self.dx_ = 1
