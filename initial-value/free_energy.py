@@ -14,12 +14,12 @@ while not convergence:
     times.append(n)
     energies.append(state.free_energy)
     state.evolve()
-    if n >= 50000:
+    if n >= 150000: # check for convergence
         convergence = True
     n += 1
 
 plt.plot(times, energies)
-plt.xlabel(r"Timestep $t^{\tilde}$")
-plt.ylabel(r"Free energy $f^{\tilde}")
-plt.title("Free energy versus time")
+plt.xlabel(r"Timestep $\tilde{t}$")
+plt.ylabel(r"Free energy $\tilde{f}$")
+plt.title(rf"Free energy versus time ($\phi_0 = {PHI0}$)")
 plt.show()
