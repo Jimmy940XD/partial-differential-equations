@@ -10,7 +10,7 @@ def jacobi(lattice: np.ndarray):
     mid = SIDE_LEN // 2
     centre = (mid, mid, mid)
     rho[centre] = 1 # initialize as one likes
-    phi = np.zeros_like(lattice)
+    phi = lattice.copy()
     for i in range(1, SIDE_LEN - 1):
         for j in range(1, SIDE_LEN - 1):
             for k in range(1, SIDE_LEN - 1):
@@ -20,13 +20,13 @@ def jacobi(lattice: np.ndarray):
                                         phi[i, j, k + 1] + phi[i, j, k - 1] + \
                                         rho[i, j, k])
     lattice[:] = phi[:]
-    return np.abs(phi - phi0)
+    return np.max(np.abs(phi - phi0))
 
 
 @njit
 def calc_Efield(phi: np.ndarray):
     SIDE_LEN = phi.shape[0]
-    E_field = np.zeros_like(phi)
+    E_field = np.zeros((SIDE_LEN, SIDE_LEN, SIDE_LEN, 3)) # the 3 is for the three-dimensional vector in each cell
     for i in range(1, SIDE_LEN - 1):
         for j in range(1, SIDE_LEN - 1):
             for k in range(1, SIDE_LEN - 1):
@@ -34,5 +34,8 @@ def calc_Efield(phi: np.ndarray):
                 Ex = phi[i + 1, j, k] - phi[i - 1, j, k]
                 Ey = phi[i, j + 1, k] - phi[i, j - 1, k]
                 Ez = phi[i, j, k + 1] - phi[i, j, k - 1]
-                E_field[i, j, k] = -1 / 2 * np.array([Ex, Ey, Ez]) # the actual vector per cell
+                # the actual vector per cell
+                E_field[i, j, k, 0] = -1 / 2 * Ex
+                E_field[i, j, k, 1] = -1 / 2 * Ey
+                E_field[i, j, k, 2] = -1 / 2 * Ez
     return E_field
