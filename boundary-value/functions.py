@@ -5,6 +5,7 @@ from numba import njit
 @njit
 def jacobi(lattice: np.ndarray):
     SIDE_LEN = lattice.shape[0]
+    phi0 = lattice.copy()
     rho = np.zeros_like(lattice)
     phi = np.zeros_like(lattice)
     for i in range(SIDE_LEN):
@@ -16,10 +17,11 @@ def jacobi(lattice: np.ndarray):
                                         phi[i, j, k + 1] + phi[i, j, k - 1] + \
                                         rho[i, j, k])
     lattice[:] = phi[:]
+    return np.abs(phi - phi0)
 
 
 @njit
-def get_Efield(phi: np.ndarray):
+def calc_Efield(phi: np.ndarray):
     SIDE_LEN = phi.shape[0]
     E_field = np.zeros_like(phi)
     for i in range(SIDE_LEN):
