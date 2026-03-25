@@ -11,9 +11,9 @@ def jacobi(lattice: np.ndarray):
     centre = (mid, mid, mid)
     rho[centre] = 1 # initialize as one likes
     phi = np.zeros_like(lattice)
-    for i in range(SIDE_LEN):
-        for j in range(SIDE_LEN):
-            for k in range(SIDE_LEN):
+    for i in range(1, SIDE_LEN - 1):
+        for j in range(1, SIDE_LEN - 1):
+            for k in range(1, SIDE_LEN - 1):
                 # calculate the next potential
                 phi[i, j, k] = 1 / 6 * (phi[i + 1, j, k] + phi[i - 1, j, k] + \
                                         phi[i, j + 1, k] + phi[i, j - 1, k] + \
@@ -27,9 +27,9 @@ def jacobi(lattice: np.ndarray):
 def calc_Efield(phi: np.ndarray):
     SIDE_LEN = phi.shape[0]
     E_field = np.zeros_like(phi)
-    for i in range(SIDE_LEN):
-        for j in range(SIDE_LEN):
-            for k in range(SIDE_LEN):
+    for i in range(1, SIDE_LEN - 1):
+        for j in range(1, SIDE_LEN - 1):
+            for k in range(1, SIDE_LEN - 1):
                 # calculation of components of electric field using a centred difference
                 Ex = phi[i + 1, j, k] - phi[i - 1, j, k]
                 Ey = phi[i, j + 1, k] - phi[i, j - 1, k]
