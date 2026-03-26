@@ -13,9 +13,16 @@ class Lattice:
         Property method. Returns an array of 3D electric field vectors
         at each cell of the lattice.
     """
-    def __init__(self, side_len: int, rho: np.ndarray):
+    def __init__(self, side_len: int, rho: np.ndarray = None):
         self.lattice = np.zeros(shape=(side_len, side_len, side_len))
-        self.rho = rho
+        if rho is None:
+            # make it point charge by default
+            self.rho = np.zeros_like(self.lattice)
+            mid = side_len // 2
+            center = (mid, mid, mid)
+            self.rho[center] = 1
+        else:
+            self.rho = rho
 
     def evolve(self, method: str):
         """
