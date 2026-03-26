@@ -7,7 +7,10 @@ SIDE_LEN = int(input("Choose the system's side length: "))
 METHOD = input("Choose the evolution method (Jacobi/Gauss-Seidel): ").lower()
 TOLERANCE = float(input("Choose the accuracy of the solution: "))
 # choose rho as one likes
-rho = None # this tells the state to initialize with a monopole configuration
+rho = np.zeros(shape=(SIDE_LEN, SIDE_LEN, SIDE_LEN))
+MID = SIDE_LEN // 2
+CENTER = (MID, MID, MID)
+rho[CENTER] = 1
 
 state = Lattice(SIDE_LEN, rho)
 
@@ -17,7 +20,6 @@ while not convergence:
 	if diff <= TOLERANCE:
 		convergence = True
 
-MID = SIDE_LEN // 2
 E_field_squared = state.E_field**2 # square E_field components
 E_field_strength = np.sqrt(np.sum(E_field_squared, axis=3)) # takes magnitude of E_field
 distance = np.arange(1, MID - 1) # distance from cell next to CENTER up to boundary (excluding it)
