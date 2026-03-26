@@ -13,18 +13,18 @@ def jacobi(info: tuple):
         The highest of the absolute differences between the previous
         step's lattice and the current step's lattice.
     """
-    phi, rho = info
-    SIDE_LEN = phi.shape[0]
-    phi0 = phi.copy()
+    lattice, source = info
+    SIDE_LEN = lattice.shape[0]
+    lattice0 = lattice.copy()
     for i in range(1, SIDE_LEN - 1):
         for j in range(1, SIDE_LEN - 1):
             for k in range(1, SIDE_LEN - 1):
                 # calculate the next potential
-                phi[i, j, k] = 1 / 6 * (phi0[i + 1, j, k] + phi0[i - 1, j, k] + \
-                                        phi0[i, j + 1, k] + phi0[i, j - 1, k] + \
-                                        phi0[i, j, k + 1] + phi0[i, j, k - 1] + \
-                                        rho[i, j, k])
-    return np.max(np.abs(phi - phi0))
+                lattice[i, j, k] = 1 / 6 * (lattice0[i + 1, j, k] + lattice0[i - 1, j, k] + \
+                                        lattice0[i, j + 1, k] + lattice0[i, j - 1, k] + \
+                                        lattice0[i, j, k + 1] + lattice0[i, j, k - 1] + \
+                                        source[i, j, k])
+    return np.max(np.abs(lattice - lattice0))
 
 
 @njit
@@ -60,26 +60,26 @@ def gauss_seidel(info: tuple):
         The highest of the absolute differences between the previous
         step's lattice and the current step's lattice.
     """
-    phi, rho = info
-    SIDE_LEN = phi.shape[0]
-    phi0 = phi.copy()
+    lattice, source = info
+    SIDE_LEN = lattice.shape[0]
+    lattice0 = lattice.copy()
     # the two loops allow for parallelisation using the red-black method
     for i in prange(1, SIDE_LEN - 1):
         for j in range(1, SIDE_LEN - 1):
             for k in range(1, SIDE_LEN - 1):
                 red = (i + j + k) % 2 == 0
                 if red:
-                    phi[i, j, k] = 1 / 6 * (phi[i + 1, j, k] + phi[i - 1, j, k] + \
-                                            phi[i, j + 1, k] + phi[i, j - 1, k] + \
-                                            phi[i, j, k + 1] + phi[i, j, k - 1] + \
-                                            rho[i, j, k])
+                    lattice[i, j, k] = 1 / 6 * (lattice[i + 1, j, k] + lattice[i - 1, j, k] + \
+                                            lattice[i, j + 1, k] + lattice[i, j - 1, k] + \
+                                            lattice[i, j, k + 1] + lattice[i, j, k - 1] + \
+                                            source[i, j, k])
     for i in prange(1, SIDE_LEN - 1):
         for j in range(1, SIDE_LEN - 1):
             for k in range(1, SIDE_LEN - 1):
                 red = (i + j + k) % 2 == 0
                 if not red:
-                    phi[i, j, k] = 1 / 6 * (phi[i + 1, j, k] + phi[i - 1, j, k] + \
-                                            phi[i, j + 1, k] + phi[i, j - 1, k] + \
-                                            phi[i, j, k + 1] + phi[i, j, k - 1] + \
-                                            rho[i, j, k])
-    return np.max(np.abs(phi - phi0))
+                    lattice[i, j, k] = 1 / 6 * (lattice[i + 1, j, k] + lattice[i - 1, j, k] + \
+                                            lattice[i, j + 1, k] + lattice[i, j - 1, k] + \
+                                            lattice[i, j, k + 1] + lattice[i, j, k - 1] + \
+                                            source[i, j, k])
+    return np.max(np.abs(lattice - lattice0))
