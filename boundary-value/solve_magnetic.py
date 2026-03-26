@@ -9,8 +9,7 @@ TOLERANCE = float(input("Choose the accuracy of the solution: "))
 # choose current as one likes
 current = np.zeros(shape=(SIDE_LEN, SIDE_LEN, SIDE_LEN))
 MID = SIDE_LEN // 2
-CENTER_LINE = (MID, MID)
-current[CENTER_LINE, 1:-1] = 1
+current[MID, MID, 1:-1] = 1
 
 state = Lattice(SIDE_LEN, current)
 
@@ -35,7 +34,7 @@ By_midplane = state.B_field[:, :, MID, 1]
 # save data
 os.makedirs("./datafiles", exist_ok=True)
 np.savetxt("./datafiles/vector_potential.dat", Az_midplane, header="Vector Potential Lattice")
-np.savetxt("./datafiles/B_field.dat", state.B_field[:, :, MID].reshape(-1, 3), header="Magnetic Field Lattice")
+np.savetxt("./datafiles/B_field.dat", state.B_field[:, :, MID].reshape(-1, 2), header="Magnetic Field Lattice")
 
 x = np.arange(SIDE_LEN)
 y = np.arange(SIDE_LEN)
