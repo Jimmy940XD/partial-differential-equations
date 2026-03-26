@@ -12,6 +12,9 @@ class Lattice:
     self.E_field: numpy.ndarray
         Property method. Returns an array of 3D electric field vectors
         at each cell of the lattice.
+    self.B_field: numpy.ndarray
+        Property method. Returns an array of 3D magnetic field vectors
+        at each cell of the lattice.
     """
     def __init__(self, side_len: int, source: np.ndarray):
         self.source = source
@@ -39,3 +42,11 @@ class Lattice:
         each cell of the lattice.
         """
         return f.calc_Efield(self.lattice)
+    
+    @property
+    def B_field(self):
+        """
+        Handler method. Returns an array of magnetic field 3D vectors at
+        each cell of the lattice.
+        """
+        return f.calc_Bfield(self.lattice)
