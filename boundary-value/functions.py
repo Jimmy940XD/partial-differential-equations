@@ -64,6 +64,24 @@ def gauss_seidel(info: tuple):
 
 
 @njit
+def sor(info: tuple):
+    """
+    Updates the current lattice in-place using the SOR method.
+    """
+    lattice, source, omega = info
+    lattice0 = lattice.copy()
+    SIDE_LEN = lattice.shape[0]
+    for i in range(1, SIDE_LEN - 1):
+        for j in range(1, SIDE_LEN - 1):
+            for k in range(1, SIDE_LEN - 1):
+                # redefine info for readability
+                info = (lattice, source)
+                gauss_seidel(info)
+                lattice0[i, j, k] = (1 - omega) * lattice0[i, j, k] + omega * lattice[i, j, k]
+    lattice[:] = lattice0[:]
+
+
+@njit
 def calc_Efield(phi: np.ndarray):
     """
     Calculates and returns the 3D electric field at each cell of
