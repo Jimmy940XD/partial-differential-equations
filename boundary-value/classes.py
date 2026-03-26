@@ -18,9 +18,9 @@ class Lattice:
         if rho is None:
             # make it point charge by default
             self.rho = np.zeros_like(self.lattice)
-            mid = side_len // 2
-            center = (mid, mid, mid)
-            self.rho[center] = 1
+            MID = side_len // 2
+            CENTER = (MID, MID, MID)
+            self.rho[CENTER] = 1
         else:
             self.rho = rho
 
