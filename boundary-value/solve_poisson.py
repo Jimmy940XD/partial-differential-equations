@@ -13,9 +13,9 @@ state = Lattice(SIDE_LEN, rho)
 
 convergence = False
 while not convergence:
-    diff = state.evolve(METHOD) # read method's docstring for deeper understanding
-    if diff <= TOLERANCE:
-        convergence = True
+	diff = state.evolve(METHOD) # read method's docstring for deeper understanding
+	if diff <= TOLERANCE:
+		convergence = True
 
 MID = SIDE_LEN // 2
 E_field_squared = state.E_field**2 # square E_field components
