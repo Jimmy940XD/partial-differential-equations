@@ -3,7 +3,7 @@ from numba import njit, prange
 
 
 @njit
-def jacobi(phi: np.ndarray):
+def jacobi(info: tuple):
     """
     Updates the current lattice in-place using the Jacobi method.
     
@@ -13,12 +13,9 @@ def jacobi(phi: np.ndarray):
         The highest of the absolute differences between the previous
         step's lattice and the current step's lattice.
     """
+    phi, rho = info
     SIDE_LEN = phi.shape[0]
     phi0 = phi.copy()
-    rho = np.zeros_like(phi)
-    mid = SIDE_LEN // 2
-    centre = (mid, mid, mid)
-    rho[centre] = 1 # initialize as one likes
     for i in range(1, SIDE_LEN - 1):
         for j in range(1, SIDE_LEN - 1):
             for k in range(1, SIDE_LEN - 1):
@@ -53,7 +50,7 @@ def calc_Efield(phi: np.ndarray):
 
 
 @njit
-def gauss_seidel(phi: np.ndarray):
+def gauss_seidel(info: tuple):
     """
     Updates the current lattice in-place using the red-black Gauss-Seidel method.
     
@@ -63,12 +60,9 @@ def gauss_seidel(phi: np.ndarray):
         The highest of the absolute differences between the previous
         step's lattice and the current step's lattice.
     """
+    phi, rho = info
     SIDE_LEN = phi.shape[0]
     phi0 = phi.copy()
-    rho = np.zeros_like(phi)
-    mid = SIDE_LEN // 2
-    centre = (mid, mid, mid)
-    rho[centre] = 1 # initialize as one likes
     # the two loops allow for parallelisation using the red-black method
     for i in prange(1, SIDE_LEN - 1):
         for j in range(1, SIDE_LEN - 1):
