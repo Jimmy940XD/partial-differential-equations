@@ -20,7 +20,7 @@ class Lattice:
         self.source = source
         self.lattice = np.zeros(shape=(side_len, side_len, side_len))
 
-    def evolve(self, method: str):
+    def evolve(self, method: str, omega: float = None):
         """
         Handler method. If assigned to a variable, it updates the
         lattice to the next iteration and returns the highest absolute
@@ -34,6 +34,9 @@ class Lattice:
             return f.jacobi(info)
         if method == "gauss-seidel":
             return f.gauss_seidel(info)
+        if method == "sor":
+            info = (info, omega)
+            f.sor(info)
     
     @property
     def E_field(self):
