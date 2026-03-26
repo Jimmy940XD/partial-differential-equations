@@ -1,13 +1,11 @@
 import numpy as np
-from functions import jacobi
+from functions import jacobi, gauss_seidel
 
 class Lattice:
     def __init__(self, side_len: int):
-        self.dx_ = 1
-        self.dt_ = self.dx_ / 2
         self.lattice = np.zeros(shape=(side_len, side_len, side_len))
 
-    def evolve(self):
+    def evolve(self, method: str):
         """
         Handler method. If assigned to a variable, it updates the
         lattice to the next iteration and returns the highest absolute
@@ -15,4 +13,8 @@ class Lattice:
         current lattice. If not assigned to a variable, it only updates
         the lattice.
         """
-        return jacobi(self.lattice)
+        method = method.lower()
+        if method == "jacobi":
+            return jacobi(self.lattice)
+        if method == "gauss-seidel":
+            return gauss_seidel(self.lattice)
