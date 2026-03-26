@@ -75,7 +75,7 @@ def gauss_seidel(phi: np.ndarray):
             for k in range(1, SIDE_LEN - 1):
                 red = (i + j + k) % 2 == 0
                 if red:
-                    phi[i, j, k] = 1 / 2 * (phi[i + 1, j, k] + phi[i - 1, j, k] + \
+                    phi[i, j, k] = 1 / 6 * (phi[i + 1, j, k] + phi[i - 1, j, k] + \
                                             phi[i, j + 1, k] + phi[i, j - 1, k] + \
                                             phi[i, j, k + 1] + phi[i, j, k - 1] + \
                                             rho[i, j, k])
@@ -84,7 +84,7 @@ def gauss_seidel(phi: np.ndarray):
             for k in range(1, SIDE_LEN - 1):
                 red = (i + j + k) % 2 == 0
                 if not red:
-                    phi[i, j, k] = 1 / 2 * (phi[i + 1, j, k] + phi[i - 1, j, k] + \
+                    phi[i, j, k] = 1 / 6 * (phi[i + 1, j, k] + phi[i - 1, j, k] + \
                                             phi[i, j + 1, k] + phi[i, j - 1, k] + \
                                             phi[i, j, k + 1] + phi[i, j, k - 1] + \
                                             rho[i, j, k])
