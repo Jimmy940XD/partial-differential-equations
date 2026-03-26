@@ -34,7 +34,7 @@ def calc_Efield(phi: np.ndarray):
     the lattice based on the current step's potential.
     """
     SIDE_LEN = phi.shape[0]
-    E_field = np.zeros((SIDE_LEN, SIDE_LEN, SIDE_LEN, 3)) # the 3 is for the three-dimensional vector in each cell
+    E_field = np.zeros(shape=(SIDE_LEN, SIDE_LEN, SIDE_LEN, 3)) # the 3 is for the three-dimensional vector in each cell
     for i in range(1, SIDE_LEN - 1):
         for j in range(1, SIDE_LEN - 1):
             for k in range(1, SIDE_LEN - 1):
@@ -83,3 +83,9 @@ def gauss_seidel(info: tuple):
                                             lattice[i, j, k + 1] + lattice[i, j, k - 1] + \
                                             source[i, j, k])
     return np.max(np.abs(lattice - lattice0))
+
+
+@njit
+def calc_Bfield(Az: np.ndarray):
+    SIDE_LEN = Az.shape[0]
+    B_field = np.zeros(shape=(SIDE_LEN, SIDE_LEN, SIDE_LEN, 3))
