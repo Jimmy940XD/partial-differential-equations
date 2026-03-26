@@ -75,8 +75,9 @@ def calc_Efield(phi: np.ndarray):
         for j in range(1, SIDE_LEN - 1):
             for k in range(1, SIDE_LEN - 1):
                 # calculation of components of electric field using a centred difference
-                Ex = phi[i + 1, j, k] - phi[i - 1, j, k]
-                Ey = phi[i, j + 1, k] - phi[i, j - 1, k]
+                # the i and j indices are swapped because i represents y and j represents x in code
+                Ex = phi[i, j + 1, k] - phi[i, j - 1, k]
+                Ey = phi[i + 1, j, k] - phi[i - 1, j, k]
                 Ez = phi[i, j, k + 1] - phi[i, j, k - 1]
                 # the actual vector per cell
                 E_field[i, j, k, 0] = -1 / 2 * Ex
@@ -97,8 +98,9 @@ def calc_Bfield(Az: np.ndarray):
         for j in range(1, SIDE_LEN - 1):
             for k in range(1, SIDE_LEN - 1):
                 # calculation of components of magnetic field using a centred difference
-                Bx = Az[i, j + 1, k] - Az[i, j - 1, k]
-                By = -(Az[i + 1, j, k] - Az[i - 1, j, k])
+                # the i and j indices aren't swapped because i represents y and j represents x in code
+                Bx = Az[i + 1, j, k] - Az[i - 1, j, k]
+                By = -(Az[i, j + 1, k] - Az[i, j - 1, k])
                 # the actual vector per cell
                 B_field[i, j, k, 0] = 1 / 2 * Bx
                 B_field[i, j, k, 1] = 1 / 2 * By
