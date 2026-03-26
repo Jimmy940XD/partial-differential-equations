@@ -2,6 +2,7 @@ from classes import Lattice
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from scipy.optimize import curve_fit
 
 SIDE_LEN = int(input("Choose the system's side length: "))
 METHOD = input("Choose the evolution method (Jacobi/Gauss-Seidel): ").lower()
@@ -62,20 +63,34 @@ ax.set_aspect("equal") # ensures the image doesn't get stretched
 plt.savefig(f"./plots/electric_visualisation_{METHOD}.png", dpi=300)
 plt.show()
 
+# theoretical models for electric field and Coulomb potential.
+inverse_squared = lambda r, a, b: a / r**2 + b
+inverse = lambda r, a, b: a / r + b
+
+# fit curves with optimal parameters
+opt_phi, _ = curve_fit(inverse, distance, phi_line)
+
 # plot potential
 plt.figure()
-plt.plot(distance, phi_line)
+plt.plot(distance, phi_line, "o", label="Simulation", markersize=4)
+plt.plot(distance, inverse(distance, *opt_phi), "-", label="Fit")
 plt.xlabel(r"Distance from charge $r$")
 plt.ylabel(r"Coulomb Potential $\varphi$")
 plt.title("Coulomb Potential vs. Distance")
+plt.legend()
 plt.savefig(f"./plots/coulomb_potential_{METHOD}.png", dpi=300)
 plt.show()
 
+# same as above, curve fitting
+opt_E, _ = curve_fit(inverse_squared, distance, E_field_line)
+
 # plot E_field strength
 plt.figure()
-plt.plot(distance, E_field_line)
+plt.plot(distance, E_field_line, "o", label="Simulation", markersize=4)
+plt.plot(distance, inverse_squared(distance, *opt_E), "-", label="Fit")
 plt.xlabel(r"Distance from charge $r$")
 plt.ylabel(r"Electric Field Strength $|\mathbf{E}|$")
 plt.title("Electric Field Strength vs. Distance")
+plt.legend()
 plt.savefig(f"./plots/E_field_strength_{METHOD}.png", dpi=300)
 plt.show()
