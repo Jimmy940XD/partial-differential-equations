@@ -1,5 +1,5 @@
 import numpy as np
-from functions import jacobi, gauss_seidel
+import functions as f
 
 class Lattice:
     def __init__(self, side_len: int):
@@ -15,6 +15,14 @@ class Lattice:
         """
         method = method.lower()
         if method == "jacobi":
-            return jacobi(self.lattice)
+            return f.jacobi(self.lattice)
         if method == "gauss-seidel":
-            return gauss_seidel(self.lattice)
+            return f.gauss_seidel(self.lattice)
+    
+    @property
+    def E_field(self):
+        """
+        Handler method. Returns an array of electric field 3D vectors at
+        each cell of the lattice.
+        """
+        return f.calc_Efield(self.lattice)
