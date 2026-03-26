@@ -14,8 +14,8 @@ class Lattice:
         at each cell of the lattice.
     """
     def __init__(self, side_len: int, source: np.ndarray):
-        self.lattice = np.zeros(shape=(side_len, side_len, side_len))
         self.source = source
+        self.lattice = np.zeros(shape=(side_len, side_len, side_len))
 
     def evolve(self, method: str):
         """
