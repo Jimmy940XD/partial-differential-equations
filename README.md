@@ -15,5 +15,9 @@ task 7: the two plots of potential and electric field vs. distance each decay as
 
 task 8: the equation $\nabla^2\mathbf{A}=-\mu _0\mathbf{J}$ is actually a system of equations disguised as a single vector equation. The system reads:\
 $$
+<<<<<<< HEAD
 \partial^2{A}{x}
 $$
+=======
+\partial^2{A}{x}
+>>>>>>> bec376e91b4bceddee8e1a4a3140a2183c08c963
