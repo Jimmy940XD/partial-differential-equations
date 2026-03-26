@@ -1,5 +1,5 @@
 import numpy as np
-from numba import njit
+from numba import njit, prange
 
 
 @njit
@@ -14,9 +14,9 @@ def jacobi(phi: np.ndarray):
         for j in range(1, SIDE_LEN - 1):
             for k in range(1, SIDE_LEN - 1):
                 # calculate the next potential
-                phi[i, j, k] = 1 / 6 * (phi[i + 1, j, k] + phi[i - 1, j, k] + \
-                                        phi[i, j + 1, k] + phi[i, j - 1, k] + \
-                                        phi[i, j, k + 1] + phi[i, j, k - 1] + \
+                phi[i, j, k] = 1 / 6 * (phi0[i + 1, j, k] + phi0[i - 1, j, k] + \
+                                        phi0[i, j + 1, k] + phi0[i, j - 1, k] + \
+                                        phi0[i, j, k + 1] + phi0[i, j, k - 1] + \
                                         rho[i, j, k])
     return np.max(np.abs(phi - phi0))
 
@@ -37,3 +37,33 @@ def calc_Efield(phi: np.ndarray):
                 E_field[i, j, k, 1] = -1 / 2 * Ey
                 E_field[i, j, k, 2] = -1 / 2 * Ez
     return E_field
+
+
+@njit
+def gauss_seidel(phi: np.ndarray):
+    SIDE_LEN = phi.shape[0]
+    phi0 = phi.copy()
+    rho = np.zeros_like(phi)
+    mid = SIDE_LEN // 2
+    centre = (mid, mid, mid)
+    rho[centre] = 1 # initialize as one likes
+    # the two loops allow for parallelisation using the red-black method
+    for i in prange(1, SIDE_LEN - 1):
+        for j in range(1, SIDE_LEN - 1):
+            for k in range(1, SIDE_LEN - 1):
+                red = (i + j + k) % 2 == 0
+                if red:
+                    phi[i, j, k] = 1 / 2 * (phi[i + 1, j, k] + phi[i - 1, j, k] + \
+                                            phi[i, j + 1, k] + phi[i, j - 1, k] + \
+                                            phi[i, j, k + 1] + phi[i, j, k - 1] + \
+                                            rho[i, j, k])
+    for i in prange(1, SIDE_LEN - 1):
+        for j in range(1, SIDE_LEN - 1):
+            for k in range(1, SIDE_LEN - 1):
+                red = (i + j + k) % 2 == 0
+                if not red:
+                    phi[i, j, k] = 1 / 2 * (phi[i + 1, j, k] + phi[i - 1, j, k] + \
+                                            phi[i, j + 1, k] + phi[i, j - 1, k] + \
+                                            phi[i, j, k + 1] + phi[i, j, k - 1] + \
+                                            rho[i, j, k])
+    return np.max(np.abs(phi - phi0))
