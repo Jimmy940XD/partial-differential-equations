@@ -43,8 +43,13 @@ contour = ax.contourf(X, Y, phi_midplane, levels=50, cmap="RdBu_r") # creates th
 colbar = plt.colorbar(contour, ax=ax, fraction=.046, pad=.04)
 colbar.set_label(r"Coulomb potential ($\varphi$)")
 jump = 4 # reduces the number of arrows that will be seen in the E_field plot
+# normalize the E_field to get appropriate arrow lengths
+E_mag_midplane = np.hypot(Ex_midplane, Ey_midplane)
+E_mag_midplane[E_mag_midplane == 0] = 1
+Ex_norm = Ex_midplane / E_mag_midplane
+Ey_norm = Ey_midplane / E_mag_midplane
 ax.quiver(X[::jump, ::jump], Y[::jump, ::jump],
-        Ex_midplane[::jump, ::jump], Ey_midplane[::jump, ::jump],
+        Ex_norm[::jump, ::jump], Ey_norm[::jump, ::jump],
         color="white",
         pivot="mid",
         alpha=.8) # creates a 2D slice of the 3D E_field
