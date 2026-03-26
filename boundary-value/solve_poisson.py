@@ -20,7 +20,7 @@ while not convergence:
 MID = SIDE_LEN // 2
 E_field_squared = state.E_field**2 # square E_field components
 E_field_strength = np.sqrt(np.sum(E_field_squared, axis=3)) # takes magnitude of E_field
-distance = np.arange(1, -2) # distance from cell next to CENTER up to boundary (excluding it)
+distance = np.arange(1, MID - 1) # distance from cell next to CENTER up to boundary (excluding it)
 # lines depndent only on distance to charge
 phi_line = state.lattice[MID + 1:-1, MID, MID]
 E_field_line = E_field_strength[MID + 1:-1, MID, MID]
@@ -52,6 +52,7 @@ ax.set_title("Cut through midplane: Potential and Electric Field")
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 ax.set_aspect("equal") # ensures the image doesn't get stretched
+plt.savefig(f"./plots/visualisation_{METHOD}.png", dpi=300)
 plt.show()
 
 # plot potential
