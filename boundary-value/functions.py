@@ -4,6 +4,15 @@ from numba import njit, prange
 
 @njit
 def jacobi(phi: np.ndarray):
+    """
+    Updates the current lattice in-place using the Jacobi method.
+    
+    Returns
+    -------
+    max_diff: float
+        The highest of the absolute differences between the previous
+        step's lattice and the current step's lattice.
+    """
     SIDE_LEN = phi.shape[0]
     phi0 = phi.copy()
     rho = np.zeros_like(phi)
@@ -23,6 +32,10 @@ def jacobi(phi: np.ndarray):
 
 @njit
 def calc_Efield(phi: np.ndarray):
+    """
+    Calculates and returns the 3D electric field at each cell of
+    the lattice based on the current step's potential.
+    """
     SIDE_LEN = phi.shape[0]
     E_field = np.zeros((SIDE_LEN, SIDE_LEN, SIDE_LEN, 3)) # the 3 is for the three-dimensional vector in each cell
     for i in range(1, SIDE_LEN - 1):
@@ -41,6 +54,15 @@ def calc_Efield(phi: np.ndarray):
 
 @njit
 def gauss_seidel(phi: np.ndarray):
+    """
+    Updates the current lattice in-place using the red-black Gauss-Seidel method.
+    
+    Returns
+    -------
+    max_diff: float
+        The highest of the absolute differences between the previous
+        step's lattice and the current step's lattice.
+    """
     SIDE_LEN = phi.shape[0]
     phi0 = phi.copy()
     rho = np.zeros_like(phi)
