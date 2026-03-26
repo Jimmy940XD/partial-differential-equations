@@ -2,6 +2,7 @@ from classes import Lattice
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from scipy.optimize import curve_fit
 
 SIDE_LEN = int(input("Choose the system's side length: "))
 METHOD = input("Choose the evolution method (Jacobi/Gauss-Seidel): ").lower()
@@ -61,20 +62,34 @@ ax.set_aspect("equal") # ensures the image doesn't get stretched
 plt.savefig(f"./plots/magnetic_visualisation_{METHOD}.png", dpi=300)
 plt.show()
 
+# theoretical models for electric field and Coulomb potential.
+logarithmic = lambda r, a, b: a * np.log(r) + b
+inverse = lambda r, a, b: a / r + b
+
+# fit curves with optimal parameters
+opt_Az, _ = curve_fit(logarithmic, distance, Az_line)
+
 # plot potential
 plt.figure()
-plt.plot(distance, Az_line)
+plt.plot(distance, Az_line, "o", label="Simulation", markersize=4)
+plt.plot(distance, logarithmic(distance, *opt_Az), "-", label="Fit")
 plt.xlabel(r"Distance from wire $r$")
 plt.ylabel(r"Vector Potential $A_z$")
 plt.title("Vector Potential vs. Distance")
+plt.legend()
 plt.savefig(f"./plots/vector_potential_{METHOD}.png", dpi=300)
 plt.show()
 
+# same as above, curve fitting
+opt_B, _ = curve_fit(inverse, distance, B_field_line)
+
 # plot E_field strength
 plt.figure()
-plt.plot(distance, B_field_line)
+plt.plot(distance, B_field_line, "o", label="Simulation", markersize=4)
+plt.plot(distance, inverse(distance, *opt_B), "-", label="Fit")
 plt.xlabel(r"Distance from wire $r$")
 plt.ylabel(r"Magnetic Field Strength $|\mathbf{B}|$")
 plt.title("Magnetic Field Strength vs. Distance")
+plt.legend()
 plt.savefig(f"./plots/B_field_strength_{METHOD}.png", dpi=300)
 plt.show()
