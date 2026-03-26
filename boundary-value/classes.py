@@ -13,16 +13,16 @@ class Lattice:
         Property method. Returns an array of 3D electric field vectors
         at each cell of the lattice.
     """
-    def __init__(self, side_len: int, rho: np.ndarray = None):
+    def __init__(self, side_len: int, source: np.ndarray = None):
         self.lattice = np.zeros(shape=(side_len, side_len, side_len))
-        if rho is None:
+        if source is None:
             # make it point charge by default
-            self.rho = np.zeros_like(self.lattice)
+            self.source = np.zeros_like(self.lattice)
             MID = side_len // 2
             CENTER = (MID, MID, MID)
-            self.rho[CENTER] = 1
+            self.source[CENTER] = 1
         else:
-            self.rho = rho
+            self.source = source
 
     def evolve(self, method: str):
         """
@@ -32,7 +32,7 @@ class Lattice:
         current lattice. If not assigned to a variable, it only updates
         the lattice.
         """
-        info = (self.lattice, self.rho)
+        info = (self.lattice, self.source)
         method = method.lower()
         if method == "jacobi":
             return f.jacobi(info)
