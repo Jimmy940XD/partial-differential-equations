@@ -1,13 +1,15 @@
 from classes import Lattice
 
 SIDE_LEN = 100
+TOLERANCE = 1e-5
 
 state = Lattice(SIDE_LEN)
 
-convergence = False
-while not convergence:
-    distance = state.evolve("jacobi") # read method's docstring for deeper understanding
-    tolerance = 1e-5
-    if distance <= tolerance:
-        convergence = True
-print(f"Convergence reached using Jacobi at distance: {distance}")
+METHODS = ("Jacobi", "Gauss-Seidel")
+for method in METHODS:
+    convergence = False
+    while not convergence:
+        distance = state.evolve(method) # read method's docstring for deeper understanding
+        if distance <= TOLERANCE:
+            convergence = True
+    print(f"Convergence reached using {method} at distance: {distance}")
