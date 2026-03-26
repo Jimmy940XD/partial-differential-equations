@@ -20,62 +20,62 @@ while not convergence:
 	if diff <= TOLERANCE:
 		convergence = True
 
-E_field_squared = state.E_field**2 # square E_field components
-E_field_strength = np.sqrt(np.sum(E_field_squared, axis=3)) # takes magnitude of E_field
+B_field_squared = state.B_field**2 # square E_field components
+B_field_strength = np.sqrt(np.sum(B_field_squared, axis=3)) # takes magnitude of E_field
 distance = np.arange(1, MID - 1) # distance from cell next to CENTER up to boundary (excluding it)
 # lines depndent only on distance to charge
-phi_line = state.lattice[MID + 1:-1, MID, MID]
-E_field_line = E_field_strength[MID + 1:-1, MID, MID]
+Az_line = state.lattice[MID + 1:-1, MID, MID]
+B_field_line = B_field_strength[MID + 1:-1, MID, MID]
 
 # get data at midplane cut
-phi_midplane = state.lattice[:, :, MID]
-Ex_midplane = state.E_field[:, :, MID, 0]
-Ey_midplane = state.E_field[:, :, MID, 1]
+Az_midplane = state.lattice[:, :, MID]
+Bx_midplane = state.B_field[:, :, MID, 0]
+By_midplane = state.B_field[:, :, MID, 1]
 
 # save data
 os.makedirs("./datafiles", exist_ok=True)
-np.savetxt("./datafiles/potential.dat", phi_midplane, header="Potential Lattice")
-np.savetxt("./datafiles/E_field.dat", state.E_field[:, :, MID].reshape(-1, 3), header="Electric Field Lattice")
+np.savetxt("./datafiles/vector_potential.dat", Az_midplane, header="Vector Potential Lattice")
+np.savetxt("./datafiles/B_field.dat", state.B_field[:, :, MID].reshape(-1, 3), header="Magnetic Field Lattice")
 
 x = np.arange(SIDE_LEN)
 y = np.arange(SIDE_LEN)
 X, Y = np.meshgrid(x, y)
 fig, ax = plt.subplots()
-contour = ax.contourf(X, Y, phi_midplane, levels=50, cmap="RdBu_r") # creates the contour with 50 discretized levels
+contour = ax.contourf(X, Y, Az_midplane, levels=50, cmap="RdBu_r") # creates the contour with 50 discretized levels
 colbar = plt.colorbar(contour, ax=ax, fraction=.046, pad=.04)
-colbar.set_label(r"Coulomb potential ($\varphi$)")
+colbar.set_label(r"Vector Potential ($A_z$)")
 jump = 4 # reduces the number of arrows that will be seen in the E_field plot
 # normalize the E_field to get appropriate arrow lengths
-E_mag_midplane = np.hypot(Ex_midplane, Ey_midplane)
-E_mag_midplane[E_mag_midplane == 0] = 1
-Ex_norm = Ex_midplane / E_mag_midplane
-Ey_norm = Ey_midplane / E_mag_midplane
+B_mag_midplane = np.hypot(Bx_midplane, By_midplane)
+B_mag_midplane[B_mag_midplane == 0] = 1
+Bx_norm = Bx_midplane / B_mag_midplane
+By_norm = By_midplane / B_mag_midplane
 ax.quiver(X[::jump, ::jump], Y[::jump, ::jump],
-        Ex_norm[::jump, ::jump], Ey_norm[::jump, ::jump],
+        Bx_norm[::jump, ::jump], By_norm[::jump, ::jump],
         color="white",
         pivot="mid",
         alpha=.8) # creates a 2D slice of the 3D E_field
-ax.set_title("Cut through midplane: Potential and Electric Field")
+ax.set_title("Cut through midplane: Vector Potential and Magnetic Field")
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 ax.set_aspect("equal") # ensures the image doesn't get stretched
-plt.savefig(f"./plots/visualisation_{METHOD}.png", dpi=300)
+plt.savefig(f"./plots/magnetic_visualisation_{METHOD}.png", dpi=300)
 plt.show()
 
 # plot potential
 plt.figure()
-plt.plot(distance, phi_line)
-plt.xlabel(r"Distance from charge $r$")
-plt.ylabel(r"Potential $\varphi$")
-plt.title("Potential vs. Distance")
-plt.savefig(f"./plots/potential_{METHOD}.png", dpi=300)
+plt.plot(distance, Az_line)
+plt.xlabel(r"Distance from wire $r$")
+plt.ylabel(r"Vector Potential $A_z$")
+plt.title("Vector Potential vs. Distance")
+plt.savefig(f"./plots/vector_potential_{METHOD}.png", dpi=300)
 plt.show()
 
 # plot E_field strength
 plt.figure()
-plt.plot(distance, E_field_line)
-plt.xlabel(r"Distance from charge $r$")
-plt.ylabel(r"Electric Field Strength $|\mathbf{E}|$")
-plt.title("Electric Field Strength vs. Distance")
-plt.savefig(f"./plots/E_field_strength_{METHOD}.png", dpi=300)
+plt.plot(distance, B_field_line)
+plt.xlabel(r"Distance from wire $r$")
+plt.ylabel(r"Magnetic Field Strength $|\mathbf{B}|$")
+plt.title("Magnetic Field Strength vs. Distance")
+plt.savefig(f"./plots/B_field_strength_{METHOD}.png", dpi=300)
 plt.show()
