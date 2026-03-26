@@ -34,7 +34,7 @@ Ey_midplane = state.E_field[:, :, MID, 1]
 
 # save data
 os.makedirs("./datafiles", exist_ok=True)
-np.savetxt("./datafiles/potential.dat", phi_midplane, header="Potential Lattice")
+np.savetxt("./datafiles/coulomb_potential.dat", phi_midplane, header="Coulomb Potential Lattice")
 np.savetxt("./datafiles/E_field.dat", state.E_field[:, :, MID].reshape(-1, 3), header="Electric Field Lattice")
 
 x = np.arange(SIDE_LEN)
@@ -55,20 +55,20 @@ ax.quiver(X[::jump, ::jump], Y[::jump, ::jump],
         color="white",
         pivot="mid",
         alpha=.8) # creates a 2D slice of the 3D E_field
-ax.set_title("Cut through midplane: Potential and Electric Field")
+ax.set_title("Cut through midplane: Coulomb Potential and Electric Field")
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 ax.set_aspect("equal") # ensures the image doesn't get stretched
-plt.savefig(f"./plots/visualisation_{METHOD}.png", dpi=300)
+plt.savefig(f"./plots/electric_visualisation_{METHOD}.png", dpi=300)
 plt.show()
 
 # plot potential
 plt.figure()
 plt.plot(distance, phi_line)
 plt.xlabel(r"Distance from charge $r$")
-plt.ylabel(r"Potential $\varphi$")
-plt.title("Potential vs. Distance")
-plt.savefig(f"./plots/potential_{METHOD}.png", dpi=300)
+plt.ylabel(r"Coulomb Potential $\varphi$")
+plt.title("Coulomb Potential vs. Distance")
+plt.savefig(f"./plots/coulomb_potential_{METHOD}.png", dpi=300)
 plt.show()
 
 # plot E_field strength
