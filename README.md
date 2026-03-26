@@ -16,11 +16,11 @@ task 7: the two plots of potential and electric field vs. distance each decay as
 task 8: the equation $\nabla^2\mathbf{A}=-\mu _0\mathbf{J}$ is actually a system of equations disguised as a single vector equation. The system reads:
 
 $$
-\begin{aligned*}
+\begin{align*}
 \nabla^2A_x &= -\mu _0J_x \\
 \nabla^2A_y &= -\mu _0J_y \\
 \nabla^2A_z &= -\mu _0J_z.
-\end{aligned*}
+\end{align*}
 $$
 
 Since $\mathbf{J}=(0, 0, J_z)$, the RHS of the first two equations becomes zero instantly, implying $A_{x,y}=0$ because the solution of the Laplace equation is that in a physical space without boundaries (or boundaries set to zero, like in our case).
