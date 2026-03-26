@@ -26,15 +26,16 @@ while not convergence:
     if distance <= TOLERANCE:
         convergence = True
 
-os.makedirs("./datafiles", exist_ok=True)
-np.savetxt("./datafiles/potential.dat", state.lattice, header="Potential Lattice")
-np.savetxt("./datafiles/E_field.dat", state.E_field, header="Electric Field Lattice")
-
-mid = SIDE_LEN // 2
+MID = SIDE_LEN // 2
 # get data at midplane cut
-phi_midplane = state.lattice[:, :, mid]
-Ex_midplane = state.E_field[:, :, mid, 0]
-Ey_midplane = state.E_field[:, :, mid, 1]
+phi_midplane = state.lattice[:, :, MID]
+Ex_midplane = state.E_field[:, :, MID, 0]
+Ey_midplane = state.E_field[:, :, MID, 1]
+
+# save data
+os.makedirs("./datafiles", exist_ok=True)
+np.savetxt("./datafiles/potential.dat", phi_midplane, header="Potential Lattice")
+np.savetxt("./datafiles/E_field.dat", state.E_field[:, :, MID].reshape(-1, 3), header="Electric Field Lattice")
 
 x = np.arange(SIDE_LEN)
 y = np.arange(SIDE_LEN)
