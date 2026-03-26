@@ -67,7 +67,7 @@ def gauss_seidel(info: tuple):
 def calc_Efield(phi: np.ndarray):
     """
     Calculates and returns the 3D electric field at each cell of
-    the lattice based on the current step's potential.
+    the lattice based on the current step's Coulomb potential.
     """
     SIDE_LEN = phi.shape[0]
     E_field = np.zeros(shape=(SIDE_LEN, SIDE_LEN, SIDE_LEN, 3)) # the 3 is for the three-dimensional vector in each cell
@@ -87,9 +87,19 @@ def calc_Efield(phi: np.ndarray):
 
 @njit
 def calc_Bfield(Az: np.ndarray):
+    """
+    Calculates and returns the 3D magnetic field at each cell of
+    the lattice based on the current step's vector potential.
+    """
     SIDE_LEN = Az.shape[0]
     B_field = np.zeros(shape=(SIDE_LEN, SIDE_LEN, SIDE_LEN, 2))
     for i in range(1, SIDE_LEN - 1):
         for j in range(1, SIDE_LEN - 1):
             for k in range(1, SIDE_LEN - 1):
-                Bx = 
+                # calculation of components of magnetic field using a centred difference
+                Bx = Az[i, j + 1, k] - Az[i, j - 1, k]
+                By = -(Az[i + 1, j, k] - Az[i - 1, j, k])
+                # the actual vector per cell
+                B_field[i, j, k, 0] = 1 / 2 * Bx
+                B_field[i, j, k, 1] = 1 / 2 * By
+    return B_field
