@@ -11,22 +11,20 @@ rho = None # this tells the state to initialize with a monopole configuration
 
 state = Lattice(SIDE_LEN, rho)
 
-distances = []
-potentials = []
-E_field_strengths = []
 convergence = False
 while not convergence:
-    distance = state.evolve(METHOD) # read method's docstring for deeper understanding
-    distances.append(distance)
-    potential = np.max(np.abs(state.lattice))
-    potentials.append(potential)
-    E_field_squared = state.E_field**2 # square E_field components
-    E_field_strength = np.sqrt(np.sum(E_field_squared, axis=3)) # takes magnitude of E_field
-    E_field_strengths.append(E_field_strength)
-    if distance <= TOLERANCE:
+    diff = state.evolve(METHOD) # read method's docstring for deeper understanding
+    if diff <= TOLERANCE:
         convergence = True
 
 MID = SIDE_LEN // 2
+E_field_squared = state.E_field**2 # square E_field components
+E_field_strength = np.sqrt(np.sum(E_field_squared, axis=3)) # takes magnitude of E_field
+distance = np.arange(1, -2) # distance from cell next to CENTER up to boundary (excluding it)
+# lines depndent only on distance to charge
+phi_line = state.lattice[MID + 1:-1, MID, MID]
+E_field_line = E_field_strength[MID + 1:-1, MID, MID]
+
 # get data at midplane cut
 phi_midplane = state.lattice[:, :, MID]
 Ex_midplane = state.E_field[:, :, MID, 0]
@@ -58,18 +56,18 @@ plt.show()
 
 # plot potential
 plt.figure()
-plt.plot(distances, potentials)
-plt.xlabel("Distance")
-plt.ylabel(r"Potential $\phi$")
+plt.plot(distance, phi_line)
+plt.xlabel(r"Distance from charge $r$")
+plt.ylabel(r"Potential $\varphi$")
 plt.title("Potential vs. Distance")
 plt.savefig(f"./plots/potential_{METHOD}.png", dpi=300)
 plt.show()
 
 # plot E_field strength
 plt.figure()
-plt.plot(distances, E_field_strengths)
-plt.xlabel("Distance")
-plt.ylabel(r"Electric Field Strength $|\underline{E}|$")
+plt.plot(distance, E_field_line)
+plt.xlabel(r"Distance from charge $r$")
+plt.ylabel(r"Electric Field Strength $|\mathbf{E}|$")
 plt.title("Electric Field Strength vs. Distance")
 plt.savefig(f"./plots/E_field_strength_{METHOD}.png", dpi=300)
 plt.show()
