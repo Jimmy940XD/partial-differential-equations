@@ -7,10 +7,10 @@ SIDE_LEN = int(input("Choose the system's side length: "))
 METHOD = input("Choose the evolution method (Jacobi/Gauss-Seidel): ").lower()
 TOLERANCE = float(input("Choose the accuracy of the solution: "))
 # choose current as one likes
-current = np.zeros(shape=(SIDE_LEN, SIDE_LEN, SIDE_LEN, 3))
+current = np.zeros(shape=(SIDE_LEN, SIDE_LEN, SIDE_LEN))
 MID = SIDE_LEN // 2
-CENTER = (MID, MID, MID)
-current[CENTER] = np.array([0, 0, 1])
+CENTER_LINE = (MID, MID)
+current[CENTER_LINE, 1:-1] = 1
 
 state = Lattice(SIDE_LEN, current)
 
