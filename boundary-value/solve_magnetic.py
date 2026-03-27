@@ -6,6 +6,10 @@ from scipy.optimize import curve_fit
 
 SIDE_LEN = int(input("Choose the system's side length: "))
 METHOD = input("Choose the evolution method (Jacobi/Gauss-Seidel/SOR): ").lower()
+if METHOD == "sor":
+	omega = 1.78 # fastest
+else:
+	omega = None
 TOLERANCE = float(input("Choose the accuracy of the solution: "))
 # choose current as one likes
 current = np.zeros(shape=(SIDE_LEN, SIDE_LEN, SIDE_LEN))
@@ -16,7 +20,7 @@ state = Lattice(SIDE_LEN, current)
 
 convergence = False
 while not convergence:
-	diff = state.evolve(METHOD) # read method's docstring for deeper understanding
+	diff = state.evolve(method=METHOD, omega=omega) # read method's docstring for deeper understanding
 	if diff <= TOLERANCE:
 		convergence = True
 
