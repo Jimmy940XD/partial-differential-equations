@@ -36,7 +36,7 @@ class Lattice:
             return f.gauss_seidel(info)
         if method == "sor":
             info = (info, omega)
-            f.sor(info)
+            return f.sor(info)
     
     @property
     def E_field(self):
