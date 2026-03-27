@@ -69,7 +69,9 @@ def sor(info: tuple):
     Updates the current lattice in-place using the SOR method.
     """
     lattice, source, omega = info
+    # two copies because one is updated in the algorithm
     lattice0 = lattice.copy()
+    lattice00 = lattice.copy()
     SIDE_LEN = lattice.shape[0]
     for i in range(1, SIDE_LEN - 1):
         for j in range(1, SIDE_LEN - 1):
@@ -79,6 +81,7 @@ def sor(info: tuple):
                 gauss_seidel(info)
                 lattice0[i, j, k] = (1 - omega) * lattice0[i, j, k] + omega * lattice[i, j, k]
     lattice[:] = lattice0[:]
+    return np.max(np.abs(lattice - lattice00))
 
 
 @njit
