@@ -20,7 +20,7 @@ class Lattice:
         self.source = source
         self.lattice = np.zeros(shape=(side_len, side_len, side_len))
 
-    def evolve(self, method: str = "sor", omega: float = None):
+    def evolve(self, omega: float, method: str = "sor"):
         """
         Handler method. If assigned to a variable, it updates the
         lattice to the next iteration and returns the highest absolute
