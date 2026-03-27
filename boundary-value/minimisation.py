@@ -18,7 +18,7 @@ for omega in omegas:
     convergence = False
     n = 0
     while not convergence:
-        diff = state.evolve(omega)
+        diff = state.evolve(omega=omega)
         n += 1
         if diff <= TOLERANCE:
             convergence = True
