@@ -5,7 +5,7 @@ import os
 from scipy.optimize import curve_fit
 
 SIDE_LEN = int(input("Choose the system's side length: "))
-METHOD = input("Choose the evolution method (Jacobi/Gauss-Seidel): ").lower()
+METHOD = input("Choose the evolution method (Jacobi/Gauss-Seidel/SOR): ").lower()
 TOLERANCE = float(input("Choose the accuracy of the solution: "))
 # choose current as one likes
 current = np.zeros(shape=(SIDE_LEN, SIDE_LEN, SIDE_LEN))
