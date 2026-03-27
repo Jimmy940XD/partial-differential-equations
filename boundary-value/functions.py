@@ -28,9 +28,10 @@ def jacobi(info: tuple):
 
 
 @njit
-def gauss_seidel(info: tuple):
+def gauss_seidel(info: tuple, over_relax: bool = False, omega: float = None):
     """
     Updates the current lattice in-place using the red-black Gauss-Seidel method.
+    If ``over_relax`` is ``True``, applies SOR method.
     
     Returns
     -------
@@ -51,6 +52,9 @@ def gauss_seidel(info: tuple):
                                             lattice[i, j + 1, k] + lattice[i, j - 1, k] + \
                                             lattice[i, j, k + 1] + lattice[i, j, k - 1] + \
                                             source[i, j, k])
+                if over_relax: # apply SOR algorithm
+                    lattice[i, j, k] = (1 - omega) * lattice0[i, j, k] + omega * lattice[i, j, k]
+
     for i in prange(1, SIDE_LEN - 1):
         for j in range(1, SIDE_LEN - 1):
             for k in range(1, SIDE_LEN - 1):
@@ -60,6 +64,8 @@ def gauss_seidel(info: tuple):
                                             lattice[i, j + 1, k] + lattice[i, j - 1, k] + \
                                             lattice[i, j, k + 1] + lattice[i, j, k - 1] + \
                                             source[i, j, k])
+                    if over_relax: # apply SOR algorithm
+                        lattice[i, j, k] = (1 - omega) * lattice0[i, j, k] + omega * lattice[i, j, k]
     return np.max(np.abs(lattice - lattice0))
 
 
@@ -69,19 +75,10 @@ def sor(info: tuple):
     Updates the current lattice in-place using the SOR method.
     """
     lattice, source, omega = info
-    # two copies because one is updated in the algorithm
     lattice0 = lattice.copy()
-    lattice00 = lattice.copy()
-    SIDE_LEN = lattice.shape[0]
-    for i in range(1, SIDE_LEN - 1):
-        for j in range(1, SIDE_LEN - 1):
-            for k in range(1, SIDE_LEN - 1):
-                # redefine info for readability
-                info = (lattice, source)
-                gauss_seidel(info)
-                lattice0[i, j, k] = (1 - omega) * lattice0[i, j, k] + omega * lattice[i, j, k]
-    lattice[:] = lattice0[:]
-    return np.max(np.abs(lattice - lattice00))
+    info = (lattice, source) # redefine info for better readability
+    gauss_seidel(info, over_relax=True, omega=omega)
+    return np.max(np.abs(lattice - lattice0))
 
 
 @njit
