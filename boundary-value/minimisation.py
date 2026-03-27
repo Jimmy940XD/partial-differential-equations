@@ -13,16 +13,16 @@ current[MID, MID, 1:-1] = 1
 state = Lattice(SIDE_LEN, current)
 
 iterations = []
-omegas = np.arange(1, 2 + STEP, STEP)
+omegas = np.arange(1, 2 + STEP, STEP) # initialize omega values
 for omega in omegas:
     convergence = False
     n = 0
     while not convergence:
-        diff = state.evolve("sor", omega)
+        diff = state.evolve(omega)
         n += 1
         if diff <= TOLERANCE:
             convergence = True
     iterations.append(n)
-index_min = np.argmin(iterations)
+index_min = np.argmin(iterations) # get the index for the minimum value
 omega_min = omegas[index_min]
 print(f"With 1 <= ω <= 2 and {STEP} separation, ω = {omega_min} shortens convergence time the most.")
