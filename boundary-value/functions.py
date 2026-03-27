@@ -52,8 +52,8 @@ def gauss_seidel(info: tuple, over_relax: bool = False, omega: float = None):
                                             lattice[i, j + 1, k] + lattice[i, j - 1, k] + \
                                             lattice[i, j, k + 1] + lattice[i, j, k - 1] + \
                                             source[i, j, k])
-                if over_relax: # apply SOR algorithm
-                    lattice[i, j, k] = (1 - omega) * lattice0[i, j, k] + omega * lattice[i, j, k]
+                    if over_relax: # apply SOR algorithm
+                        lattice[i, j, k] = (1 - omega) * lattice0[i, j, k] + omega * lattice[i, j, k]
 
     for i in prange(1, SIDE_LEN - 1):
         for j in range(1, SIDE_LEN - 1):
