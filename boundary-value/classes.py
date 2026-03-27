@@ -20,22 +20,34 @@ class Lattice:
         self.source = source
         self.lattice = np.zeros(shape=(side_len, side_len, side_len))
 
-    def evolve(self, method: str, omega: float = None):
+    def evolve(self, method: str = "sor", omega: float = None):
         """
         Handler method. If assigned to a variable, it updates the
         lattice to the next iteration and returns the highest absolute
         difference among all the elements between the previous and the
         current lattice. If not assigned to a variable, it only updates
         the lattice.
+
+        Parameters
+        ----------
+        method: str, optional
+            The evolution algorithm to be used. By default, it is set to
+            the SOR method, which is the fastest.
+        omega: float, optional
+            The omega parameter for the evolution of the system using SOR.
+            Only needed for SOR, hence it is ``None`` by default as it is
+            expected that if no value of ``omega`` is passed, ``method``
+            will be. 
         """
-        info = (self.lattice, self.source)
-        method = method.lower()
-        if method == "jacobi":
-            return f.jacobi(info)
-        if method == "gauss-seidel":
-            return f.gauss_seidel(info)
-        if method == "sor":
-            info = (info, omega)
+        if omega is None:
+            info = (self.lattice, self.source)
+            method = method.lower()
+            if method == "jacobi":
+                return f.jacobi(info)
+            if method == "gauss-seidel":
+                return f.gauss_seidel(info)
+        else:
+            info = (self.lattice, self.source, omega)
             return f.sor(info)
     
     @property
